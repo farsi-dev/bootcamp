@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const PORT = 5500;
 
+const db = require("./models");
+
 const errorHandler = require("./handlers/error");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
@@ -14,6 +16,16 @@ app.use(bodyParser.json());
 
 app.use("/api/auth", authRoute);
 app.use("/api/user/:id", postRoute);
+
+app.get("/", async function(req, res, next){
+  try {
+    let posts = await db.Post.find()
+    return res.status(200).json(posts)
+  } catch (err) {
+    return next(err)
+  }
+});
+
 
 app.use((req, res, next) => {
   let error = new Error("Not Found");

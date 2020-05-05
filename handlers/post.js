@@ -23,6 +23,15 @@ exports.createPost = async (req, res, next) => {
 };
 
 
+exports.showPost = async(req, res, next) => {
+  try {
+    let foundPost = await db.Post.findById(req.params.post_id);
+    return res.status(200).json(foundPost)
+  } catch (err) {
+    return next(err)
+  }
+}
+
 exports.removePost = async (req, res, next) =>{
   try {
     let foundPost = await db.Post.findById(req.params.post_id);
